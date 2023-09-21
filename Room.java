@@ -15,7 +15,7 @@ public class Room {
         this.level = level;
         this.campus = campus;
         this.capacity = capacity;
-        calendar = new int[7][21-7];
+        calendar = new int[6][21-7];
     }
     public int getId() {
         return id;
@@ -37,7 +37,27 @@ public class Room {
     }
     
     public boolean tryAssign(Course course) {
-        return false;
+        if (course.getCampus() != this.campus) {
+            return false;
+        }
+        if (course.getAmount() > this.capacity) {
+            return false;
+        }
+        for (String s : course.getDays()){
+            for (int x = 0; x < course.getDuration(); x++) {
+                if (this.calendar[0][course.getHour()-9+x] != 0) {
+                    return false;
+                }
+            }
+        }
+        for (String s : course.getDays()){
+            for (int x = 0; x < course.getDuration(); x++) {
+                if (this.calendar[0][course.getHour()-9+x] == 0) {
+                    this.calendar[0][course.getHour()-9+x] =course.getId();
+                }
+            }
+        }
+        return true;
     }
     
 }
