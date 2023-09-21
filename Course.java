@@ -29,6 +29,7 @@ public class Course {
         this.duration = duration;
         this.days = days;
         this.amount = amount;
+        this.Assigned = false;
     }
     /**
      * @return id
