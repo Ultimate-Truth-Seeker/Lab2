@@ -45,7 +45,16 @@ public class Lab2 {
                     String name = sd.next();
                     int hour = Integer.parseInt(sd.next());
                     int duration = Integer.parseInt(sd.next());
-                    String[] days = {sd.next()};
+                    Scanner ddd = new Scanner(sd.next());
+                    ddd.useDelimiter(",");
+                    ArrayList<String> dayss = new ArrayList<>();
+                    while (ddd.hasNext()) {
+                        dayss.add(ddd.next());
+                    }
+                    String[] days = new String[dayss.size()];
+                    for (int x = 0; x < dayss.size(); x++) {
+                        days[x] = dayss.get(x);
+                    }
                     int amount = Integer.parseInt(sd.next());
                     courses.add(new Course(id, campus, name, hour, duration, days, amount));
                     
