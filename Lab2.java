@@ -10,7 +10,6 @@ import java.util.Scanner;
  * Programa de aasignación de cursos
  * 
  * NOTA: se asume que en la primera línea de los csv se comienza de una vez con los datos y no con los nombres de los campos
- * NOTA: se asume que los csv se separan por punto y coma y no por coma
  * 
  * @author Ultimate-Truth-Seeker
  * @since 20/09/2023
@@ -29,7 +28,7 @@ public class Lab2 {
         List<Course> courses = new ArrayList<>(); // lista de cursos
         List<Room> rooms = new ArrayList<>(); // lista de salones
         Scanner s = new Scanner(System.in); // scanner general de entrada
-        System.out.println("Bienvenido al programa! Asegurese que los csv de datos usen punto y coma en vez de solo coma, y que en la primera línea no están los nombres de los campos ");
+        System.out.println("Bienvenido al programa! Asegurese que en la primera línea del csv no están los nombres de los campos ");
         System.out.println("ingrese la ubicación del archivo de salones: ");
         String pathroom = s.nextLine(); // ingresa archivo de salones 
         System.out.println("Ingrese la ubicación del archivo de cursos: ");
@@ -38,7 +37,7 @@ public class Lab2 {
             while (scc.hasNextLine()) {
                 String line = scc.nextLine();// se lee el csv linea por linea
                 Scanner sc = new Scanner(line);
-                    sc.useDelimiter(";");// Se usa un scanner para leer cada elemento separado por comas en la línea 
+                    sc.useDelimiter(",");// Se usa un scanner para leer cada elemento separado por comas en la línea 
                     String xx = sc.next();
                     int campus = Integer.parseInt(xx);// los valores enteros se convierten de string a int
                     String btxt = sc.next();
@@ -91,7 +90,7 @@ public class Lab2 {
                 while (sdd.hasNextLine()) {
                     String line = sdd.nextLine();// mismo procedimiento con las líneas del csv
                     Scanner sd = new Scanner(line);
-                    sd.useDelimiter(";");
+                    sd.useDelimiter(",");
                     int id = Integer.parseInt(sd.next());
                     for (Course rm : courses){// verifica que no hay ningun id que se repita en la lísta de cursos
                         if (rm.getId() == id) {
@@ -116,14 +115,14 @@ public class Lab2 {
                         System.out.println("Error, una duración de curso no está entre 1 y 3: " + duration);
                         menu = false;
                     }
-                    Scanner ddd = new Scanner(sd.next());// verifica dia por dia que esten bien escritos. La mayúsculas y minúsculas no importan
-                    ddd.useDelimiter(",");
+                    // verifica dia por dia que esten bien escritos. La mayúsculas y minúsculas no importan
+                    
                     ArrayList<String> dayss = new ArrayList<>();
-                    while (ddd.hasNext()) {
-                        dayss.add(ddd.next());
+                    while (sd.hasNext()) {
+                        dayss.add(sd.next());
                     }
-                    String[] days = new String[dayss.size()];
-                    for (int x = 0; x < dayss.size(); x++) {
+                    String[] days = new String[dayss.size() - 1];
+                    for (int x = 0; x < dayss.size() - 1; x++) {
                         if (ndias.indexOf(dayss.get(x).toLowerCase()) == -1) {
                             System.out.println("Error, Hay un día mal escrito: \"" + dayss.get(x) + "\" Escriba los días sin tilde, sin espacios y sin errores ortográficos");
                             menu = false;
@@ -131,15 +130,12 @@ public class Lab2 {
                             days[x] = dayss.get(x).toLowerCase().toString();
                         }
                     }
-                    int amount = Integer.parseInt(sd.next());
+                    int amount = Integer.parseInt(dayss.get(dayss.size() - 1));
                     if (amount < 1 || amount > 60) {// verifica el rango de la cantidad de estudiantes
                         System.out.println("Error, una cantidad de estudiantes no está entre 1 y 60: " + amount);
                         menu = false;
                     }
-                    if (sd.hasNext()) {
-                        System.out.println("Error, hay más elementos en la línea de los que debería haber");
-                        menu = false;
-                    }
+                    
                     if (menu) {// añade un nuevo curso si no hay errores, sino muestra la línea erronea
                         courses.add(new Course(id, campus, name, hour, duration, days, amount));
                     } else {
@@ -228,7 +224,7 @@ public class Lab2 {
                         for (Room rm : rooms) {
                             c.setAssigned(rm.tryAssign(c));// prueba asignarse a cada salón
                             if (c.isAssigned()) {// si se logró asignar añadir datos a la lista de exportación y dejar de probar salones
-                                crs.add("" + c.getId() + ";" + rm.getCampus() + ";" + rm.getBuilding() + ";" + rm.getLevel() + ";" + rm.getId());
+                                crs.add("" + c.getId() + "," + rm.getCampus() + "," + rm.getBuilding() + "," + rm.getLevel() + "," + rm.getId());
                                 
                                 break;
                             }
