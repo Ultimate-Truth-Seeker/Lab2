@@ -24,7 +24,7 @@ public class Lab2 {
         for (String ss : dias) {
             ndias.add(ss);
         }
-        boolean menu = true; // condición de menú, se desactiva si hay algun error en la lectura
+        boolean menu = true; boolean err = false;// condición de menú, se desactiva si hay algun error en la lectura
         List<Course> courses = new ArrayList<>(); // lista de cursos
         List<Room> rooms = new ArrayList<>(); // lista de salones
         Scanner s = new Scanner(System.in); // scanner general de entrada
@@ -36,7 +36,7 @@ public class Lab2 {
         try (Scanner scc = new Scanner(new File(pathroom))) {// recursos try catch para intentar abrir el archivo y que el tipo de datos sea correcto
             while (scc.hasNextLine()) {
                 String line = scc.nextLine();// se lee el csv linea por linea
-                Scanner sc = new Scanner(line);
+                Scanner sc = new Scanner(line); err = false;
                     sc.useDelimiter(",");// Se usa un scanner para leer cada elemento separado por comas en la línea 
                     String xx = sc.next();
                     int campus = Integer.parseInt(xx);// los valores enteros se convierten de string a int
@@ -44,7 +44,7 @@ public class Lab2 {
                     char building = "A".charAt(0);
                     if (btxt.length() != 1) {// verifica que el campo de edificio tenga un solo caracter
                         System.out.println("Error, hay un campo de edificio que no es de un solo caracter: " + btxt);
-                        menu = false;
+                        menu = false; err = true;
                     } else {
                         building = btxt.charAt(0);
                     }
@@ -55,53 +55,52 @@ public class Lab2 {
                         } else {
                             if (x == abc.length() - 1) {
                                 System.out.println("Error, un edificio no es una letra mayúscula: " + building);
-                                menu = false;
+                                menu = false; err = true;
                             }
                         }
                     }
                     int level = Integer.parseInt(sc.next());
                     if (level < 1 || level > 10) {// verifica el rango del nivel
                         System.out.println("Error, hay un nivel que no está entre 1 y 10: " + level);
-                        menu = false;
+                        menu = false; err = true;
                     }
                     int id = Integer.parseInt(sc.next());
                     if (id < 1 || id > 99) {// verifica el rango del id
                         System.out.println("Error, un id de salón no está entre 1 y 99: " + id);
-                        menu = false;
+                        menu = false; err = true;
                     }
                     int capacity = Integer.parseInt(sc.next());
                     if (capacity < 10 || capacity > 150) {// verifica el rango de la capacidad
                         System.out.println("Error, una capacidad no está entre 10 y 150: " + capacity);
-                        menu = false;
+                        menu = false; err = true;
                     }
                     if (sc.hasNext()) {
                         System.out.println("Error, hay más elementos en la línea de los que debería haber");
-                        menu = false;
+                        menu = false; err = true;
                     }
                     if (menu) {// si no hay errores se crea un nuevo objeto en la lista
                         rooms.add(new Room(id, building, level, campus, capacity));
                     }
-                    else {// sino se muestra la línea con los errores
+                    else if (err){// sino se muestra la línea con los errores
                         System.out.println("Linea errónea: \n" + line);
                     }
                 sc.close();
             }
             try (Scanner sdd = new Scanner(new File(pathcourse))) {// try catch con el otro archivo
+                List<Integer> ids = new ArrayList<>();
                 while (sdd.hasNextLine()) {
                     String line = sdd.nextLine();// mismo procedimiento con las líneas del csv
-                    Scanner sd = new Scanner(line);
+                    Scanner sd = new Scanner(line); err = false;
                     sd.useDelimiter(",");
-                    boolean err = false;
-                    int id = Integer.parseInt(sd.next());
-                    for (Course rm : courses){// verifica que no hay ningun id que se repita en la lísta de cursos
-                        if (rm.getId() == id) {
-                            System.out.println("Error, hay un id de curso repetido: " + id);
-                            menu =false; err = true;
-                            break;
-                        }
+                    int idc = Integer.parseInt(sd.next());
+                    // verifica que no hay ningun id que se repita en la lísta de cursos    
+                    if (ids.indexOf(idc) != -1) {
+                        System.out.println("Error, hay un id de curso repetido: " + idc);
+                        menu =false; err = true;
                     }
-                    if (id == 0){// evita que haya un id igual a 0 debido a que en el objeto salón el cero significa que el salón está libre
-                        System.out.println("Error, hay un id de curso igual a 0: " + id);
+                    ids.add(idc);
+                    if (idc == 0){// evita que haya un id igual a 0 debido a que en el objeto salón el cero significa que el salón está libre
+                        System.out.println("Error, hay un id de curso igual a 0: " + idc);
                         menu =false; err = true;
                     }
                     int campus = Integer.parseInt(sd.next());
@@ -137,9 +136,9 @@ public class Lab2 {
                         menu = false; err = true;
                     }
                     
-                    if (menu && err) {// añade un nuevo curso si no hay errores, sino muestra la línea erronea
-                        courses.add(new Course(id, campus, name, hour, duration, days, amount));
-                    } else {
+                    if (menu) {// añade un nuevo curso si no hay errores, sino muestra la línea erronea
+                        courses.add(new Course(idc, campus, name, hour, duration, days, amount));
+                    } else if (err) {
                         System.out.println("Línea errónea: \n" + line);
                     }
                     sd.close();
