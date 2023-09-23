@@ -44,16 +44,64 @@ public class Room {
             return false;
         }
         for (String s : course.getDays()){
+            int d;
+            switch (s){
+                case "lunes":
+                d = 0;
+                break;
+                case "martes":
+                d = 1;
+                break;
+                case "miercoles":
+                d = 2;
+                break;
+                case "jueves":
+                d = 3;
+                break;
+                case "viernes":
+                d = 4;
+                break;
+                case "sabado":
+                d = 5;
+                break;
+                default:
+                d= 0;
+                break;
+            }
             for (int x = 0; x < course.getDuration(); x++) {
-                if (this.calendar[0][course.getHour()-9+x] != 0) {
+                if (this.calendar[d][course.getHour()-7+x] != 0) {
                     return false;
                 }
             }
         }
         for (String s : course.getDays()){
+            int d;
+            switch (s){
+                case "lunes":
+                d = 0;
+                break;
+                case "martes":
+                d = 1;
+                break;
+                case "miercoles":
+                d = 2;
+                break;
+                case "jueves":
+                d = 3;
+                break;
+                case "viernes":
+                d = 4;
+                break;
+                case "sabado":
+                d = 5;
+                break;
+                default:
+                d= 0;
+                break;
+            }
             for (int x = 0; x < course.getDuration(); x++) {
-                if (this.calendar[0][course.getHour()-9+x] == 0) {
-                    this.calendar[0][course.getHour()-9+x] =course.getId();
+                if (this.calendar[d][course.getHour()-7+x] == 0) {
+                    this.calendar[d][course.getHour()-7+x] =course.getId();
                 }
             }
         }
