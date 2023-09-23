@@ -91,29 +91,30 @@ public class Lab2 {
                     String line = sdd.nextLine();// mismo procedimiento con las líneas del csv
                     Scanner sd = new Scanner(line);
                     sd.useDelimiter(",");
+                    boolean err = false;
                     int id = Integer.parseInt(sd.next());
                     for (Course rm : courses){// verifica que no hay ningun id que se repita en la lísta de cursos
                         if (rm.getId() == id) {
                             System.out.println("Error, hay un id de curso repetido: " + id);
-                            menu =false;
+                            menu =false; err = true;
                             break;
                         }
                     }
                     if (id == 0){// evita que haya un id igual a 0 debido a que en el objeto salón el cero significa que el salón está libre
                         System.out.println("Error, hay un id de curso igual a 0: " + id);
-                        menu =false;
+                        menu =false; err = true;
                     }
                     int campus = Integer.parseInt(sd.next());
                     String name = sd.next();
                     int hour = Integer.parseInt(sd.next());
                     if (hour < 7 || hour > 21) {// verifica el rango del horario
                         System.out.println("Error, una hora no está entre 7 y 21: " + hour);
-                        menu = false;
+                        menu = false; err = true;
                     }
                     int duration = Integer.parseInt(sd.next());
                     if (duration < 1 || duration > 3) {// verifica el rango de la duración
                         System.out.println("Error, una duración de curso no está entre 1 y 3: " + duration);
-                        menu = false;
+                        menu = false; err = true;
                     }
                     // verifica dia por dia que esten bien escritos. La mayúsculas y minúsculas no importan
                     
@@ -125,7 +126,7 @@ public class Lab2 {
                     for (int x = 0; x < dayss.size() - 1; x++) {
                         if (ndias.indexOf(dayss.get(x).toLowerCase()) == -1) {
                             System.out.println("Error, Hay un día mal escrito: \"" + dayss.get(x) + "\" Escriba los días sin tilde, sin espacios y sin errores ortográficos");
-                            menu = false;
+                            menu = false; err = true;
                         } else {
                             days[x] = dayss.get(x).toLowerCase().toString();
                         }
@@ -133,10 +134,10 @@ public class Lab2 {
                     int amount = Integer.parseInt(dayss.get(dayss.size() - 1));
                     if (amount < 1 || amount > 60) {// verifica el rango de la cantidad de estudiantes
                         System.out.println("Error, una cantidad de estudiantes no está entre 1 y 60: " + amount);
-                        menu = false;
+                        menu = false; err = true;
                     }
                     
-                    if (menu) {// añade un nuevo curso si no hay errores, sino muestra la línea erronea
+                    if (menu && err) {// añade un nuevo curso si no hay errores, sino muestra la línea erronea
                         courses.add(new Course(id, campus, name, hour, duration, days, amount));
                     } else {
                         System.out.println("Línea errónea: \n" + line);
