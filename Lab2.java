@@ -75,6 +75,10 @@ public class Lab2 {
                         System.out.println("Error, una capacidad no está entre 10 y 150: " + capacity);
                         menu = false;
                     }
+                    if (sc.hasNext()) {
+                        System.out.println("Error, hay más elementos en la línea de los que debería haber");
+                        menu = false;
+                    }
                     if (menu) {// si no hay errores se crea un nuevo objeto en la lista
                         rooms.add(new Room(id, building, level, campus, capacity));
                     }
@@ -130,6 +134,10 @@ public class Lab2 {
                     int amount = Integer.parseInt(sd.next());
                     if (amount < 1 || amount > 60) {// verifica el rango de la cantidad de estudiantes
                         System.out.println("Error, una cantidad de estudiantes no está entre 1 y 60: " + amount);
+                        menu = false;
+                    }
+                    if (sd.hasNext()) {
+                        System.out.println("Error, hay más elementos en la línea de los que debería haber");
                         menu = false;
                     }
                     if (menu) {// añade un nuevo curso si no hay errores, sino muestra la línea erronea
